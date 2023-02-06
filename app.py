@@ -1,30 +1,21 @@
 import arcade
+from game.game_objects import Game
 
-grid_size = 50
-grid_rows = 10
-grid_columns = 10
+GRID_ROWS = 5
+GRID_COLUMNS = 5
+GRID_SIZE = 100
 
-def on_draw(delta_time):
-    arcade.start_render()
-    for row in range(grid_rows):
-        for column in range(grid_columns):
-            x = column * grid_size
-            y = row * grid_size
-            arcade.draw_rectangle_filled(x + grid_size / 2, y + grid_size / 2, grid_size, grid_size, arcade.color.WHITE)
+class GridWindow(arcade.Window):
+    def __init__(self, width, height):
+        super().__init__(width, height)
+        self.game = Game()
 
-def on_mouse_press(x, y, button, modifiers):
-    column = x // grid_size
-    row = y // grid_size
-    x = column * grid_size + grid_size / 2
-    y = row * grid_size + grid_size / 2
-    arcade.draw_circle_filled(x, y, grid_size / 4, arcade.color.RED)
+    def on_draw(self):
+        self.game.draw()
 
-arcade.open_window(grid_columns * grid_size, grid_rows * grid_size, "2D Grid Example")
-arcade.set_background_color(arcade.color.BLACK)
-arcade.schedule(on_draw, 1 / 60)
+    def on_mouse_press(self, x, y, button, modifiers):
+        self.game.on_mouse_press(x, y, button, modifiers)
 
-window = arcade.get_window()
-window.on_mouse_press = on_mouse_press
-
-arcade.run()
-
+if __name__ == '__main__':
+    window = GridWindow(GRID_COLUMNS * GRID_SIZE, GRID_ROWS * GRID_SIZE)
+    arcade.run()
